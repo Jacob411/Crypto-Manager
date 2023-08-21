@@ -6,12 +6,25 @@
 #include <cryptopp/modes.h>
 #include <cryptopp/filters.h>
 #include <cryptopp/osrng.h>
+#include <cryptopp/hex.h>
 
 
-void GenerateRandomIV(CryptoPP::byte* iv) {
+std::string GenerateRandomIV() {
     // Generate a random IV
     CryptoPP::AutoSeededRandomPool prng;
-    prng.GenerateBlock(iv, CryptoPP::AES::BLOCKSIZE);
+    CryptoPP::SecByteBlock iv(CryptoPP::AES::BLOCKSIZE);
+    prng.GenerateBlock(iv, iv.size());
+
+    // Convert to string
+    std::string ivString;
+    CryptoPP::StringSource(iv, iv.size(), true,
+        new CryptoPP::HexEncoder(
+            new CryptoPP::StringSink(ivString)
+        )
+    );
+
+    return ivString;
+
 }
 
 void Encrypt(const std::string& input, const std::string& key, const std::string& iv, std::string& output) {
@@ -61,24 +74,27 @@ void Decrypt(const std::string& input, const std::string& key, const std::string
 int main(){
     // Input data, encryption key, and IV
     std::string input;
+    std::cout << "Enter text: ";
     std::getline(std::cin, input);
+
+    // Generate random IV
+    std::string strIV = GenerateRandomIV();
+    std::cout << "IV: " << strIV << std::endl;
+
 
     std::cout << "Input: " << input << std::endl;
     std::string key = "MySecretKey12345";
-    std::string iv = "InitializationVec";
 
     // Encrypt
     std::string encryptedData;
-    Encrypt(input, key, iv, encryptedData);
+    Encrypt(input, key, strIV, encryptedData);
     std::cout << "Encrypted: " << encryptedData << std::endl;
 
     // Decrypt
     std::string decryptedData;
-    Decrypt(encryptedData, key, iv, decryptedData);
+    Decrypt(encryptedData, key, strIV, decryptedData);
     std::cout << "Decrypted: " << decryptedData << std::endl;
 
-    CryptoPP::SecByteBlock iv;
-    GenerateRandomIV(iv);
 
     return 0;
 }
