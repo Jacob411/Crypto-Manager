@@ -42,7 +42,7 @@ std::string AESEncryption::Encrypt(const std::string& input, const std::string& 
             new CryptoPP::StringSink(output)
         )
     );
-    
+    return output;
 }
 
 std::string AESEncryption::Decrypt(const std::string& input, const std::string& key, const std::string& iv, std::string& output) {
@@ -62,5 +62,6 @@ std::string AESEncryption::Decrypt(const std::string& input, const std::string& 
             new CryptoPP::StringSink(output)
         )
     );
+    return output;
 }
 

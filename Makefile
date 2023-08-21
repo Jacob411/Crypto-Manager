@@ -1,12 +1,17 @@
+
 CXX = g++
-
 CXXFLAGS = -Wall -std=c++11
+LIBS = -lcrypto++
 
-LIBS =  -lcrypto++
+SOURCES = main.cpp AESEncryption.cpp
+OBJECTS = $(SOURCES:.cpp=.o)
+TARGET = myprogram
 
-myprogram: main.cpp
-	$(CXX) $(CXXFLAGS) -o myprogram main.cpp $(LIBS)
+$(TARGET): $(OBJECTS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LIBS)
 
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $<
 
 clean:
-	rm -f *.o myprogram
+	rm -f $(OBJECTS) $(TARGET)
