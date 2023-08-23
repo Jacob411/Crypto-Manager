@@ -3,7 +3,7 @@ CXX = g++
 CXXFLAGS = -Wall -std=c++11
 LIBS = -lcrypto++
 
-SOURCES = main.cpp AESEncryption.cpp
+SOURCES = main.cpp AESStringEncryption.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 TARGET = myprogram
 
