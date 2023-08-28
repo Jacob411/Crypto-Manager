@@ -14,8 +14,8 @@
 class AESFileEncryption
 {
 public:
-    void EncryptFile(const char* inputFilePath, const char* outputFilePath, const char* key);
-    void DecryptFile(const char* inputFilePath, const char* outputFilePath, const char* key);
+    void EncryptFile(const std::string inputFilePath, const std::string outputFilePath, const char* key);
+    void DecryptFile(const std::string inputFilePath, const std::string outputFilePath, const char* key);
 
 private:
     CryptoPP::SecByteBlock GenerateRandomIV();
@@ -32,7 +32,7 @@ CryptoPP::SecByteBlock AESFileEncryption::GenerateRandomIV(){
 }
 
 
-void AESFileEncryption::EncryptFile(const char* inputFilePath, const char* outputFilePath, const char* key)
+void AESFileEncryption::EncryptFile(const std::string inputFilePath, const std::string outputFilePath, const char* key)
 {
     CryptoPP::SecByteBlock iv = GenerateRandomIV();
 
@@ -83,7 +83,7 @@ void AESFileEncryption::EncryptFile(const char* inputFilePath, const char* outpu
 
 }
 
-void AESFileEncryption::DecryptFile(const char* inputFilePath, const char* outputFilePath, const char* key){
+void AESFileEncryption::DecryptFile(const std::string inputFilePath, const std::string outputFilePath, const char* key){
     // Read the IV from the input file
     CryptoPP::SecByteBlock iv(CryptoPP::AES::BLOCKSIZE);
     
@@ -133,17 +133,39 @@ void AESFileEncryption::DecryptFile(const char* inputFilePath, const char* outpu
 }
 
 
-int main()
+int main(int argc, char* argv[])
 {
     AESFileEncryption aesEncryption;
-    std::string key = "0123456789abcdef";
+
+    std::string key;
+
+    std::cout << "Enter key: ";
+    std::cin >> key;
+
+    std::string inputFilePath;
+    std::cout << "Enter input file path: ";
+    std::cin >> inputFilePath;
+
+    std::string outputFilePath;
+    std::cout << "Enter output file path: ";
+    std::cin >> outputFilePath;
+
+    //check if file exists
+    std::ifstream inputFile(inputFilePath);
+    if (!inputFile) {
+        std::cerr << "Error: Could not open input file" << std::endl;
+        return 1;
+    }
+    inputFile.close();
+    std::cout << "File exists" << std::endl;
 
 
-    aesEncryption.EncryptFile("files/input.txt", "files/test.enc", key.c_str());
+
+    aesEncryption.EncryptFile(inputFilePath, outputFilePath, key.c_str());
 
 
 
-    aesEncryption.DecryptFile("files/test.enc", "files/output1.txt", key.c_str());
+    aesEncryption.DecryptFile(outputFilePath, "files/output1.txt", key.c_str());
 
     return 0;
 }
