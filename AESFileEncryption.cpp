@@ -165,7 +165,7 @@ int main(int argc, char* argv[])
 
 
 
-    aesEncryption.DecryptFile(outputFilePath, "files/output1.txt", key.c_str());
+    aesEncryption.DecryptFile(outputFilePath, "files/output2.txt", key.c_str());
 
     return 0;
 }
