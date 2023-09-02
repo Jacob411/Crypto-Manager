@@ -7,8 +7,8 @@
 #include <cryptopp/files.h>
 #include <cryptopp/osrng.h>
 
-
-
+#include <ncurses.h>
+#include <menu.h>
 
 
 class AESFileEncryption
@@ -133,8 +133,74 @@ void AESFileEncryption::DecryptFile(const std::string inputFilePath, const std::
 }
 
 
+
+
 int main(int argc, char* argv[])
+
 {
+    std::cout << "\e[32m"; // Set the text color to green
+    std::cout << "\e[?25l"; // Hide the cursor
+    initscr(); // Initialize NCurses
+    keypad(stdscr, TRUE); // Enable special keys
+
+    int choice;
+    int highlight = 1;
+    int max_choices = 3;
+
+    while (true) {
+        clear(); // Clear the screen
+
+        // Display the menu
+        mvprintw(1, 1, "Select an option:");
+        mvprintw(3, 1, "1. Encrypt");
+        mvprintw(4, 1, "2. Decrypt");
+        mvprintw(5, 1, "3. Exit");
+
+        // Highlight the current choice
+        for (int i = 1; i <= max_choices; i++) {
+            if (i == highlight) {
+                attron(A_REVERSE);
+            }
+            mvprintw(i + 2, 1, " "); // Clear any previous highlighting
+            mvprintw(i + 2, 2, "%d", i);
+            attroff(A_REVERSE);
+        }
+
+        // Get user input
+        choice = getch();
+
+        switch (choice) {
+            case KEY_UP:
+                if (highlight > 1) {
+                    highlight--;
+                }
+                break;
+            case KEY_DOWN:
+                if (highlight < max_choices) {
+                    highlight++;
+                }
+                break;
+            case '\n': // Enter key
+                std::cout << "\e[?25h";
+                if (highlight == 1) {
+                    // Add your encryption logic here
+                    mvprintw(8, 1, "Encrypting...");
+                } else if (highlight == 2) {
+                    // Add your decryption logic here
+                    mvprintw(8, 1, "Decrypting...");
+                } else if (highlight == 3) {
+                    endwin(); // End NCurses
+                    return 0;
+                }
+                break;
+            default:
+                break;
+        }
+
+        refresh();
+    }
+
+    endwin(); // End NCurses
 
     AESFileEncryption aesEncryption;
 

@@ -1,11 +1,11 @@
 
 CXX = g++
 CXXFLAGS = -Wall -std=c++11
-LIBS = -lcrypto++
+LIBS = -lcrypto++ -lncurses -lmenu 
 
 SOURCES = AESFileEncryption.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
-TARGET = myprogram
+TARGET = AESFileEncryption
 
 $(TARGET): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LIBS)
