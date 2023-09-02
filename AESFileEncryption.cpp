@@ -135,19 +135,21 @@ void AESFileEncryption::DecryptFile(const std::string inputFilePath, const std::
 
 int main(int argc, char* argv[])
 {
+
     AESFileEncryption aesEncryption;
 
     std::string key;
 
-    std::cout << "Enter key: ";
-    std::cin >> key;
-
     std::string inputFilePath;
-    std::cout << "Enter input file path: ";
+    std::cout << "Enter input file name to encrypt: ";
     std::cin >> inputFilePath;
 
+
+    std::cout << "Enter encryption key: ";
+    std::cin >> key;
+
     std::string outputFilePath;
-    std::cout << "Enter output file path: ";
+    std::cout << "Enter output file path for the encrypted key: ";
     std::cin >> outputFilePath;
 
     //check if file exists
