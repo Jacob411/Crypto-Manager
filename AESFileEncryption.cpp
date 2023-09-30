@@ -7,8 +7,6 @@
 #include <cryptopp/files.h>
 #include <cryptopp/osrng.h>
 
-#include <ncurses.h>
-#include <menu.h>
 
 
 class AESFileEncryption
@@ -138,102 +136,89 @@ void AESFileEncryption::DecryptFile(const std::string inputFilePath, const std::
 int main(int argc, char* argv[])
 
 {
-    std::cout << "\e[32m"; // Set the text color to green
-    std::cout << "\e[?25l"; // Hide the cursor
-    initscr(); // Initialize NCurses
-    keypad(stdscr, TRUE); // Enable special keys
+    // read in command line arguments
+    // if first command line argument is -e, encrypt
+    // if first command line argument is -d, decrypt
+    // if first command line argument is -h, print help
+    // if first command line argument is -v, print version
+    // ideas: key, input file, output file, all, status, config, log, time
+    // else print help
+    // if no command line arguments, print help
+    
+    // Strings containing returned info
+    std::string helpInfo = "Help: \n"
+                            "Usage: crypto-manager [OPTION]... [FILE]...\n"
+                            "Encrypt or decrypt FILE using AES encryption.\n"
+                            "\n"
+                            "  -e, --encrypt\t\tencrypt FILE\n"
+                            "  -d, --decrypt\t\tdecrypt FILE\n"
+                            "  -h, --help\t\tprint this help message and exit\n"
+                            "  -v, --version\t\tprint version and exit\n"
+                            "\n"
+                            "Report bugs to <" "email" ">.";
 
-    int choice;
-    int highlight = 1;
-    int max_choices = 3;
+    std::string versionInfo = "Version: 0.1.0";
 
-    while (true) {
-        clear(); // Clear the screen
 
-        // Display the menu
-        mvprintw(1, 1, "Select an option:");
-        mvprintw(3, 1, "1. Encrypt");
-        mvprintw(4, 1, "2. Decrypt");
-        mvprintw(5, 1, "3. Exit");
-
-        // Highlight the current choice
-        for (int i = 1; i <= max_choices; i++) {
-            if (i == highlight) {
-                attron(A_REVERSE);
-            }
-            mvprintw(i + 2, 1, " "); // Clear any previous highlighting
-            mvprintw(i + 2, 2, "%d", i);
-            attroff(A_REVERSE);
-        }
-
-        // Get user input
-        choice = getch();
-
-        switch (choice) {
-            case KEY_UP:
-                if (highlight > 1) {
-                    highlight--;
-                }
-                break;
-            case KEY_DOWN:
-                if (highlight < max_choices) {
-                    highlight++;
-                }
-                break;
-            case '\n': // Enter key
-                std::cout << "\e[?25h";
-                if (highlight == 1) {
-                    // Add your encryption logic here
-                    mvprintw(8, 1, "Encrypting...");
-                } else if (highlight == 2) {
-                    // Add your decryption logic here
-                    mvprintw(8, 1, "Decrypting...");
-                } else if (highlight == 3) {
-                    endwin(); // End NCurses
-                    return 0;
-                }
-                break;
-            default:
-                break;
-        }
-
-        refresh();
-    }
-
-    endwin(); // End NCurses
 
     AESFileEncryption aesEncryption;
+    
+    if (argc > 1) {
+        std::string firstArg = argv[1];
+        if (firstArg == "-e") {
 
-    std::string key;
+            std::string key;
 
-    std::string inputFilePath;
-    std::cout << "Enter input file name to encrypt: ";
-    std::cin >> inputFilePath;
+            std::string inputFilePath;
+            std::cout << "Enter input file name to encrypt: ";
+            std::cin >> inputFilePath;
 
+            std::string outputFilePath;
+            std::cout << "Enter output file path for the encrypted key: ";
+            std::cin >> outputFilePath;
 
-    std::cout << "Enter encryption key: ";
-    std::cin >> key;
+            //check if file exists
+            std::ifstream inputFile(inputFilePath);
+            if (!inputFile) {
+                std::cerr << "Error: Could not open input file" << std::endl;
+                return 1;
+            }
+            inputFile.close();
+            std::cout << "File exists" << std::endl;
 
-    std::string outputFilePath;
-    std::cout << "Enter output file path for the encrypted key: ";
-    std::cin >> outputFilePath;
+            std::cout << "Enter encryption key: ";
+            std::cin >> key;
 
-    //check if file exists
-    std::ifstream inputFile(inputFilePath);
-    if (!inputFile) {
-        std::cerr << "Error: Could not open input file" << std::endl;
-        return 1;
+            std::cout << "Encrypting " << inputFilePath << std::endl;
+            aesEncryption.EncryptFile(inputFilePath, outputFilePath, key.c_str());
+
+    
+        } else if (firstArg == "-d") {
+            //take in file name and key
+            std::string key;
+            std::string inputFilePath;
+            std::string outputFilePath;
+            std::cout << "Enter input file name to decrypt: ";
+            std::cin >> inputFilePath;
+            std::cout << "Enter encryption key: ";
+            std::cin >> key;
+            std::cout << "Enter output file path for the decrypted key: ";
+            std::cin >> outputFilePath;
+
+            std::cout << "Decrypting" << inputFilePath << std::endl;
+            aesEncryption.DecryptFile(inputFilePath, outputFilePath, key.c_str());
+
+        } else if (firstArg == "-h") {
+            std::cout << helpInfo << std::endl;
+        } else if (firstArg == "-v") {
+            std::cout << versionInfo << std::endl;
+        } else {
+            std::cout << "Invalid command line argument; \nuse crypto-manager -h for help" << std::endl;
+        }
+    } else {
+        std::cout << "No command line arguments; \nuse crypto-manager -h for help" << std::endl;
     }
-    inputFile.close();
-    std::cout << "File exists" << std::endl;
 
-
-
-    aesEncryption.EncryptFile(inputFilePath, outputFilePath, key.c_str());
-
-
-
-    aesEncryption.DecryptFile(outputFilePath, "files/output2.txt", key.c_str());
 
     return 0;
 }

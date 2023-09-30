@@ -1,0 +1,5 @@
+# git ignore file
+# ignore build files
+build/
+#ignore compile_commands.json
+compile_commands.json
