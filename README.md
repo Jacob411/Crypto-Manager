@@ -10,7 +10,7 @@
 ##Usage:
 ```bash
 crypto-manager [OPTION]... [FILE]...
-done
+```
 Encrypt or decrypt FILE using AES encryption.
 
   -e, --encrypt		encrypt FILE
