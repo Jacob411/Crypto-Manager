@@ -16,11 +16,11 @@ make
 crypto-manager [OPTION]... [FILE]...
 ```
 
-Encrypt or decrypt FILE using AES encryption.
-
-  -e, --encrypt		encrypt FILE
-  -d, --decrypt		decrypt FILE
-  -h, --help		print this help message and exit
-  -v, --version		print version and exit
-
-Report bugs to <email>.
+Encrypt or decrypt FILE using AES encryption.  
+  
+  -e, --encrypt		encrypt FILE  
+  -d, --decrypt		decrypt FILE  
+  -h, --help		print this help message and exit  
+  -v, --version		print version and exit  
+  
+Report bugs to Jacob411/Crypto-Manager - Issues.  
