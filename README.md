@@ -5,7 +5,10 @@
 
 1. Compile the executable using the Make command
 
-2. add the executable to your path
+2. Add the executable to your path
+```bash
+make
+```
 
 ## Usage
 
