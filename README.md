@@ -7,7 +7,8 @@
 
 2. add the executable to your path
 
-## Usage:
+## Usage
+
 ```bash
 crypto-manager [OPTION]... [FILE]...
 ```
