@@ -7,10 +7,11 @@
 
 2. add the executable to your path
 
-##Usage:
+## Usage:
 ```bash
 crypto-manager [OPTION]... [FILE]...
 ```
+
 Encrypt or decrypt FILE using AES encryption.
 
   -e, --encrypt		encrypt FILE
