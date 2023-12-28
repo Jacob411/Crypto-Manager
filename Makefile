@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -Wall -std=c++11
-LIBS = -lcrypto++ 
+LIBS = -lcrypto++
 
 SOURCES = AESFileEncryption.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
